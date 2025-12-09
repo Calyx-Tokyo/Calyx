@@ -5,9 +5,21 @@ interface Props {
 }
 
 const { title, description = 'Calyx - Official Website' } = Astro.props;
-const base = import.meta.env.BASE_URL;
-const faviconUrl = base + 'favicon.svg';
-const ogImageUrl = new URL('logo.jpg', Astro.site).href;
+const basePath = import.meta.env.BASE_URL;
+const site = Astro.site;
+const canonicalUrl = site ? new URL(Astro.url.pathname, site).href : undefined;
+const faviconSvgUrl = basePath + 'favicon.svg';
+const faviconIcoUrl = basePath + 'favicon.ico';
+const appleTouchIconUrl = basePath + 'logo.jpg';
+const ogImageUrl = site ? new URL('logo.jpg', site).href : basePath + 'logo.jpg';
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Calyx',
+  url: site ?? '',
+  logo: ogImageUrl,
+  description,
+};
 ---
 
 <!doctype html>
@@ -17,14 +29,33 @@ const ogImageUrl = new URL('logo.jpg', Astro.site).href;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <meta name="theme-color" content="#000000" />
-    <link rel="icon" type="image/svg+xml" href={faviconUrl} />
+    <meta name="robots" content="index, follow" />
+    <meta
+      name="keywords"
+      content="Calyx, カリクス, バンド, 音楽, ライブ, 最新情報, お問い合わせ"
+    />
+    <meta name="author" content="Calyx" />
+    {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+    <link rel="icon" type="image/svg+xml" href={faviconSvgUrl} />
+    <link rel="icon" type="image/x-icon" href={faviconIcoUrl} />
+    <link rel="shortcut icon" href={faviconIcoUrl} />
+    <link rel="apple-touch-icon" href={appleTouchIconUrl} />
     <title>{title}</title>
     
     <!-- Open Graph -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
+    <meta property="og:site_name" content="Calyx" />
+    <meta property="og:locale" content="ja_JP" />
     <meta property="og:image" content={ogImageUrl} />
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
   </head>
   <body>
     <slot />
