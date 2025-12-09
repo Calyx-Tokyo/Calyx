@@ -1,9 +1,13 @@
 import { defineConfig } from 'astro/config';
 
+// 環境変数でデプロイ先を切り替え可能。
+// デフォルトはカスタムドメイン https://calyx.tokyo/ を指す。
+const site = process.env.SITE_URL || 'https://calyx.tokyo/';
+const base = process.env.BASE_PATH || '/';
+
 export default defineConfig({
-  // GitHub Pages 用 URL（プロジェクトページ）。ベースパスも設定。
-  site: 'https://calyx-tokyo.github.io/Calyx/',
-  base: '/Calyx/',
+  site,
+  base,
   output: 'static',
 });
 
