@@ -1,0 +1,138 @@
+---
+interface NewsItem {
+  date: string;
+  title: string;
+  content: string;
+  tag?: string;
+}
+
+const newsItems: NewsItem[] = [
+  {
+    date: '2025.12.10',
+    title: 'Official Website Open',
+    content: 'Calyx公式ウェブサイトをオープンしました。',
+    tag: 'Info'
+  }
+];
+---
+
+<section id="news" class="news section">
+  <h2 class="section-title fade-in">News</h2>
+  
+  <div class="news-list">
+    {newsItems.map((item, index) => (
+      <article class="news-item fade-in" style={`animation-delay: ${index * 0.1}s`}>
+        <div class="news-meta">
+          <time class="news-date">{item.date}</time>
+          {item.tag && <span class="news-tag">{item.tag}</span>}
+        </div>
+        <div class="news-body">
+          <h3 class="news-title">{item.title}</h3>
+          <p class="news-content">{item.content}</p>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .news {
+    background: linear-gradient(180deg, var(--color-bg) 0%, var(--color-bg-elevated) 50%, var(--color-bg) 100%);
+  }
+
+  .news-list {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .news-item {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 30px;
+    padding: 30px;
+    border: 1px solid var(--color-border);
+    background: rgba(10, 10, 10, 0.5);
+    transition: all var(--transition-base);
+    position: relative;
+  }
+
+  .news-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 0;
+    background: var(--color-accent);
+    transition: height var(--transition-base);
+  }
+
+  .news-item:hover {
+    border-color: var(--color-accent);
+    transform: translateX(5px);
+  }
+
+  .news-item:hover::before {
+    height: 100%;
+  }
+
+  .news-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .news-date {
+    font-family: var(--font-serif);
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    letter-spacing: 0.1em;
+  }
+
+  .news-tag {
+    display: inline-block;
+    width: fit-content;
+    padding: 4px 12px;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    border: 1px solid var(--color-accent);
+  }
+
+  .news-body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .news-title {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--color-text);
+  }
+
+  .news-content {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    line-height: 1.8;
+  }
+
+  @media (max-width: 768px) {
+    .news-item {
+      grid-template-columns: 1fr;
+      gap: 15px;
+      padding: 20px;
+    }
+
+    .news-meta {
+      flex-direction: row;
+      align-items: center;
+      gap: 15px;
+    }
+  }
+</style>
+
